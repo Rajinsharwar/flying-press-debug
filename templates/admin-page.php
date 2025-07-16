@@ -143,16 +143,17 @@ document.addEventListener('DOMContentLoaded', function () {
             const span = stepDiv.querySelector('span');
             if (data.success) {
                 span.innerHTML = `✅ ${data.data.message} <a href="#" data-log="${encodeURIComponent(data.data.log || 'No logs provided')}" onclick="openLogModal(this)">Log</a>`;
-
-                runStepsSequentially(steps, index + 1);
             } else {
                 const logId = `log-${stepId}`;
                 span.innerHTML = `❌ ${data.data.message} <a href="#" data-log="${encodeURIComponent(data.data.log || 'No logs provided')}" onclick="openLogModal(this)">Log</a>`;
             }
+
+            runStepsSequentially(steps, index + 1);
         })
         .catch(err => {
             const span = stepDiv.querySelector('span');
             span.innerHTML = `❌ Request error: ${err.message}`;
+            runStepsSequentially(steps, index + 1);
         });
     }
 

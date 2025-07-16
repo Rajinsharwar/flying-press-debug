@@ -143,6 +143,8 @@ function flp_debug_start_queue_home_url() {
 
     $url = admin_url( 'admin-ajax.php?action=task_runner_preload-urls' );
 
+    usleep( 0.2 * 1_000_000 );
+
     $response = wp_remote_post($url, [
         'timeout' => 10,
         'blocking' => true,
@@ -150,8 +152,9 @@ function flp_debug_start_queue_home_url() {
         'sslverify' => false,
     ]);
 
+    $log[] = 'POST call to: ' . $url;
     $log[] = 'POST response Code: ' . wp_remote_retrieve_response_code( $response );
-    $log[] = 'Response POST: ' . print_r( $response, true );
+    $log[] = 'Response POST: (might timeout because it\'s blocking call, ignore and check if cache is getting created) ' . print_r( $response, true );
     $log[] = '';
     $log[] = 'Response POST Body: ' . wp_remote_retrieve_body( $response );
 
@@ -164,6 +167,7 @@ function flp_debug_start_queue_home_url() {
 
     $log[] = '';
     $log[] = '';
+    $log[] = 'GET call to: ' . $url;
     $log[] = 'GET response Code: ' . wp_remote_retrieve_response_code( $response2 );
     $log[] = 'Response GET (just debug, will fail with cURL timeout if all PHP workers are busy): ' . print_r( $response2, true );
     $log[] = '';
@@ -197,6 +201,7 @@ function flp_debug_process_home_url() {
     // single, sequential request
     $response = wp_remote_get($url, $args);
 
+    $log[] = 'GET call to: ' . $url;
     $log[] = 'GET response Code: ' . wp_remote_retrieve_response_code( $response );
     $log[] = 'Response GET: ' . print_r( $response, true );
     $log[] = '';
