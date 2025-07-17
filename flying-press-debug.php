@@ -127,18 +127,6 @@ function flp_debug_run_step() {
                 ]);
             }
             break;
-            $success = rand(0, 1);
-            if ($success) {
-                wp_send_json_success([
-                    'message' => 'URL added to queue.'
-                ]);
-            } else {
-                wp_send_json_error([
-                    'message' => 'Failed to add URL.',
-                    'log' => "Attempted to dgadd URL to queue.\nAttempted to add URL to queue.\nAttempted to add URL to queue.\nAttempted to add URL to queue.\nAttempted to add URL to queue.\nAttempted to add URL to queue.\nAttempted to add URL to queue.\nAttempted to add URL to queue.\nAttempted to add URL to queue.\nAttempted to add URL to queue.\nAttempted to add URL to queue.\nAttempted to add URL to queue.\nAttempted to add URL to queue.\nError: Preload service rejected the URL.\nStack trace:\n - Line 42: queue_add()\n - Line 77: run_step('add_to_queue')"
-                ]);
-            }
-            break;
 
         default:
             wp_send_json_error([
