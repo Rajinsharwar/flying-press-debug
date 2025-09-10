@@ -12,8 +12,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 
 // Clear Home URL cache file
-function flp_debug_clear_home_url() {
-    $url = home_url();
+function flp_debug_clear_home_url( $url ) {
+    // $url = home_url();
     $log = [];
 
     if (!defined('FLYING_PRESS_CACHE_DIR')) {
@@ -76,8 +76,8 @@ function flp_debug_clear_home_url() {
 }
 
 // Queue the Home URL in the wp-tasks.
-function flp_debug_queue_home_url() {
-    $urls = [ home_url() ];
+function flp_debug_queue_home_url( $url ) {
+    $urls = [ $url ];
     $url = $urls[ 0 ];
     $log = [];
 
@@ -130,7 +130,7 @@ function flp_debug_queue_home_url() {
 }
 
 // Start running the Queue by Hiting the endpoint.
-function flp_debug_start_queue_home_url() {
+function flp_debug_start_queue_home_url( $url ) {
     $log = [];
 
     global $wpdb;
@@ -181,9 +181,9 @@ function flp_debug_start_queue_home_url() {
 }
 
 // Process the cache creation for the Home URL.
-function flp_debug_process_home_url() {
+function flp_debug_process_home_url( $url ) {
     $log = [];
-    $url = home_url();
+    // $url = home_url();
 
     $user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36';
 
@@ -215,13 +215,16 @@ function flp_debug_process_home_url() {
 }
 
 // Finally: Check if the cache is created.
-function flp_debug_verify_cache_home_url() {
+function flp_debug_verify_cache_home_url( $url ) {
     $log = [];
-    $url = home_url();
+    // $url = home_url();
 
     // File paths for cache files
     $host = parse_url( $url, PHP_URL_HOST );
-    $cache_file_path = WP_CONTENT_DIR . "/cache/flying-press/$host/index.html.gz";
+    $parsed    = parse_url( $url, PHP_URL_PATH );
+    $parsed    = urldecode( $parsed );
+    $last_part = basename( rtrim( $parsed, '/' ) );
+    $cache_file_path = WP_CONTENT_DIR . "/cache/flying-press/$host/$last_part/index.html.gz";
 
     // Check if the gzipped cache file exists
     $log[] = 'Searched for Cache file path: ' . $cache_file_path;

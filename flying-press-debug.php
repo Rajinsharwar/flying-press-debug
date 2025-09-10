@@ -4,7 +4,7 @@
  * Plugin Name: (DEBUG) FlyingPress
  * Plugin URI: https://profiles.wordpress.org/rajinsharwar
  * Description: Helper to DEBUG FlyingPress.
- * Version: 1.0.0
+ * Version: 1.0.1
  * Requires PHP: 7.4
  * Requires at least: 4.7
  * Author: Rajin Sharwar
@@ -47,10 +47,11 @@ add_action('wp_ajax_flp_debug_run_step', 'flp_debug_run_step');
 function flp_debug_run_step() {
     check_ajax_referer('flp_debug_nonce');
     $step = sanitize_text_field($_POST['step'] ?? '');
+    $url = sanitize_url( $_POST['url'] ?? home_url() );
 
     switch ($step) {
         case 'clear_home_url':
-            $response = flp_debug_clear_home_url();
+            $response = flp_debug_clear_home_url( $url );
 
             if ( true === $response[ 0 ] ) {
                 wp_send_json_success([
@@ -66,7 +67,7 @@ function flp_debug_run_step() {
             break;
 
         case 'queue_home_url':
-            $response = flp_debug_queue_home_url();
+            $response = flp_debug_queue_home_url( $url );
 
             if ( true === $response[ 0 ] ) {
                 wp_send_json_success([
@@ -82,7 +83,7 @@ function flp_debug_run_step() {
             break;
 
         case 'start_queue_home_url':
-            $response = flp_debug_start_queue_home_url();
+            $response = flp_debug_start_queue_home_url( $url );
 
             if ( true === $response[ 0 ] ) {
                 wp_send_json_success([
@@ -98,7 +99,7 @@ function flp_debug_run_step() {
             break;
         
         case 'process_home_url':
-            $response = flp_debug_process_home_url();
+            $response = flp_debug_process_home_url( $url );
 
             if ( true === $response[ 0 ] ) {
                 wp_send_json_success([
@@ -113,7 +114,7 @@ function flp_debug_run_step() {
             }
             break;
         case 'verify_cache_home_url':
-            $response = flp_debug_verify_cache_home_url();
+            $response = flp_debug_verify_cache_home_url( $url );
 
             if ( true === $response[ 0 ] ) {
                 wp_send_json_success([

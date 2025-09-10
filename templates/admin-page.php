@@ -21,6 +21,12 @@
                     </select>
                 </td>
             </tr>
+            <tr id="flp-debug-url-row">
+                <th scope="row"><label for="flp_debug_url">URL to Test</label></th>
+                <td>
+                    <input type="text" name="flp_debug_url" id="flp_debug_url" placeholder="https://example.com/" style="width: 350px;">
+                </td>
+            </tr>
         </table>
 
         <button type="submit" class="button button-primary">Run Debug</button>
@@ -104,6 +110,7 @@ document.addEventListener('DOMContentLoaded', function () {
     form.addEventListener('submit', function (e) {
         e.preventDefault();
         const action = document.getElementById('flp_debug_action').value;
+        const url = document.getElementById('flp_debug_url').value;
         statusBox.innerHTML = '';
         closeModal();
 
@@ -135,6 +142,7 @@ document.addEventListener('DOMContentLoaded', function () {
             body: new URLSearchParams({
                 action: 'flp_debug_run_step',
                 step: step,
+                url: document.getElementById('flp_debug_url').value,
                 _ajax_nonce: '<?php echo wp_create_nonce('flp_debug_nonce'); ?>'
             })
         })
@@ -181,6 +189,19 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('flp-log-modal').style.display = 'none';
         document.body.style.overflow = '';
     };
+
+    // Show/hide URL field based on action
+    const actionSelect = document.getElementById('flp_debug_action');
+    const urlRow = document.getElementById('flp-debug-url-row');
+    function toggleUrlRow() {
+        if (actionSelect.value === 'single') {
+            urlRow.style.display = '';
+        } else {
+            urlRow.style.display = 'none';
+        }
+    }
+    actionSelect.addEventListener('change', toggleUrlRow);
+    toggleUrlRow(); // Initialize on page load
 });
 </script>
 
